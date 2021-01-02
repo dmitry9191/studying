@@ -7,4 +7,5 @@ let incr = 10,
 --decr;
 
 console.log(decr, incr);
-
+console.log('hello world');
+ 
