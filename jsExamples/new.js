@@ -1,21 +1,21 @@
 'use strict';
 
-let f = debounce(console.log, 1000);
-
-function debounce(f, ms) {
-    let switcher = false;
-
-    function wrapper() {
-        
-        if (switcher === false) {
-            f.apply(this, arguments);
-            switcher = true;
-            setTimeout(() => switcher = false, ms);
-        }
-        
+function askPassword(ok, fail) {
+    let password = prompt('Password?', '');
+    if (password === 'rockstar') {
+        ok();
+    } else {
+        fail();
     }
-    return wrapper;
 }
 
-setInterval(() => f(1), 100);
+const user = {
+    name: 'John', 
 
+    login(result) {
+        alert( this.name + (result ? ' logged in' : ' failed to log in') );
+    }
+};
+
+
+askPassword( user.login.bind(user, true), user.login.bind(user, false) );
