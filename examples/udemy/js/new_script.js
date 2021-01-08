@@ -1,8 +1,15 @@
 'use strict';
 
-let num = 50;
+const soldier = {
+    health: 400,
+    armor: 200,
+    sayHello() {
+        console.log('Say hello to my little friend!');
+    }
+};
 
-do {
-    console.log(num);
-    num++;
-} while (num < 55);
+const john = Object.create(soldier);
+
+console.log(john.armor);
+john.sayHello();
+

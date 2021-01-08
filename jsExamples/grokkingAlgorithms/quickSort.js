@@ -1,5 +1,7 @@
+'use strict';
+
 function quicksort(arr) {
-    if (arr.length < 2) { // The base case: arrays with 0 and 1 element are already sorted
+    if (arr.length < 2) { // The base case: arrays with 0 and 1 elements are already sorted
         return arr;
     } else {
         let pivot = arr[Math.floor((arr.length - 1) / 2)]; // Recursive case
