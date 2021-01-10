@@ -1,9 +1,12 @@
+'use strict';
+
 let worker = {
     slow(min, max) {
         console.log(`Called with ${min}, ${max}`);
         return min + max; // здесь могут быть очень ресурсоемкие вычисления
     }
-}
+};
+
 // Хеш-функция превращает два аргумента в одну строку для помещения в коллекцию
 function hash(args) {
     return [].join.call(args); // берется метод join для обычного массива [], и применяется в контексте псевдомассива args

@@ -89,4 +89,3 @@ personalMovieDB.showMyDB();
 personalMovieDB.writeYourGenres();
 
 console.log(personalMovieDB); 
-
