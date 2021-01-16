@@ -1,21 +1,17 @@
 'use strict';
 
-function askPassword(ok, fail) {
-    let password = prompt('Password?', '');
-    if (password === 'rockstar') {
-        ok();
-    } else {
-        fail();
+class PowerArray extends Array {
+    isEmpty() {
+        return this.length === 0;
+    }
+
+    static get [Symbol.species]() {
+        return Array;
     }
 }
 
-const user = {
-    name: 'John', 
+const arr = new PowerArray(1, 2, 3, 4);
+const filteredArr = arr.filter(item => item >= 10);
 
-    login(result) {
-        alert( this.name + (result ? ' logged in' : ' failed to log in') );
-    }
-};
+console.log(filteredArr);
 
-
-askPassword( user.login.bind(user, true), user.login.bind(user, false) );
