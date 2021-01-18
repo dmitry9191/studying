@@ -15,6 +15,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+    
     const movieDB = {
         movies: [
             "Логан",
@@ -25,69 +26,80 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
     
-    const adversity = document.querySelectorAll('.promo__adv img'),
-          promoBg = document.querySelector('.promo__bg'),
-          checkbox = document.querySelector('.add input[type="checkbox"]'),
-          genre = document.querySelector('.promo__genre'),
-          movieList = document.querySelector('.promo__interactive-list');
+    const adv = document.querySelectorAll('.promo__adv img'),
+          poster = document.querySelector('.promo__bg'),
+          genre = poster.querySelector('.promo__genre'),
+          movieList = document.querySelector('.promo__interactive-list'),
+          addForm = document.querySelector('form.add'),
+          addInput = addForm.querySelector('.adding__input'),
+          checkbox = addForm.querySelector('[type="checkbox"]');
     
-    adversity.forEach(item => item.remove());
-    
-    genre.textContent = 'драма';
-    
-    promoBg.style.backgroundImage = 'url("img/bg.jpg")';
-    
-    document.querySelector('.add button').addEventListener('click', addFilm);
-    
-    getSort();
-    
-    function addFilm(e) {
-        
+    addForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const input = document.querySelector('.adding__input');
-    
-        if (input.value) {
-            if (input.value.length > 21) {
-                input.value = cutName(input.value);
-            }
+
+        let newFilm = addInput.value;
+        const favourite = checkbox.checked;
+
+        if (newFilm) {
             
-            movieDB.movies.push(input.value);
-            getSort();
-            check(checkbox);
+            if (newFilm.length > 21) {
+                newFilm = `${newFilm.slice(0, 22)}...`;
+            }
+
+            if (favourite) {
+                console.log('Adds the lovely film');
+            }
+
+            movieDB.movies.push(newFilm);
+            sortArr(movieDB.movies);
+
+            createMovieList(movieDB.movies, movieList);
         }
-    
-    }
-    
-    function getSort() {
-        movieList.innerHTML = '';
-        movieDB.movies.sort();
-        movieDB.movies.forEach((film, i) => {
-            movieList.innerHTML += `
-                <li class="promo__interactive-item">${i + 1}. ${film}
-                    <div class="delete"></div>
-                </li>
-            `;
+
+        e.target.reset();
+
+    });
+
+    const deleteAdv = (arr) => {
+        arr.forEach(item => {
+            item.remove();
         });
-        console.log(movieDB.movies);
-        document.querySelectorAll('.delete').forEach((item, i) => {
-            item.addEventListener('click', () => {
-                item.parentElement.remove();
+    };
+
+    const makeChanges = () => {
+        genre.textContent = 'драма';
+
+        poster.getElementsByClassName.backgroundImage = 'url("img/bg.jpg)';
+    };
+
+    const sortArr = (arr) => {
+        arr.sort();
+    };
+
+    function createMovieList(films, parent) {
+        parent.innerHTML = '';
+        sortArr(films);
+
+        films.forEach((film, i) => {
+            parent.innerHTML += `
+            <li class="promo__interactive-item">${i + 1} ${film}
+                <div class="delete"></div>
+            </li>
+        `;
+        });
+
+        document.querySelectorAll('.delete').forEach((btn, i) => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.remove();
                 movieDB.movies.splice(i, 1);
-    
-                getSort();
+
+                createMovieList(films, parent);
             });
         });
-    
     }
-    
-    function cutName(inputValue) {
-        const name = inputValue.slice(0, 22);
-        return `${name}...`;
-    }
-    
-    function check(elem) {
-        if (elem.checked) {
-            console.log('Добавляем любимый фильм');
-        }
-    }
+
+    deleteAdv(adv);
+    makeChanges();
+    createMovieList(movieDB.movies, movieList);
+
 });
