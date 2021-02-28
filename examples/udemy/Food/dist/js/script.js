@@ -101,23 +101,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnTrigger.forEach(btn => {
         btn.addEventListener('click', () => {
-            toggler(modal, 'show', 'hidden');
+            toggler('hidden');
         });
     });
 
     btnClose.addEventListener('click', () => {
-        toggler(modal, 'show', '');
+        toggler('');
     });
 
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            toggler(modal, 'show', '');
+            toggler('');
         }
     });
 
-    function toggler(elem, selector, overflow) {
-        elem.classList.toggle(selector);
-        document.body.style.overflow = overflow;
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
+            toggler('');
+        }
+    });
+
+    const modalTimerId = setTimeout(toggler, 5000, 'hidden');
+
+    window.addEventListener('scroll', showModalByScroll);
+
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            toggler('hidden');
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+
+    function toggler(overflowValue) {
+        modal.classList.toggle('show');
+        document.body.style.overflow = overflowValue;
+        clearInterval(modalTimerId);
     }
 
 });
