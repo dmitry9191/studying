@@ -92,5 +92,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-        
+
+    // Modal
+
+    const btnTrigger = document.querySelectorAll('[data-modal]'),
+          modal = document.querySelector('.modal'),
+          btnClose = document.querySelector('[data-close]');
+
+    btnTrigger.forEach(btn => {
+        btn.addEventListener('click', () => {
+            toggler(modal, 'show', 'hidden');
+        });
+    });
+
+    btnClose.addEventListener('click', () => {
+        toggler(modal, 'show', '');
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            toggler(modal, 'show', '');
+        }
+    });
+
+    function toggler(elem, selector, overflow) {
+        elem.classList.toggle(selector);
+        document.body.style.overflow = overflow;
+    }
+
 });
