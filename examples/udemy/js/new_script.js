@@ -33,7 +33,7 @@ const heisenberg = {
 sayMyName.call(heisenberg, "you're goddamn right");
 sayMyName.apply(heisenberg, ["you're goddamn right"]);
 */
-
+/* bind
 function count(num) {
     return this * num;
 }
@@ -42,3 +42,35 @@ const double = count.bind(2);
 
 console.log(double(3));
 console.log(double(11));
+*/
+
+class Rectangle {
+    constructor(height, width) {
+        this.height = height;
+        this.width = width;
+    } 
+
+    calcArea() {
+        return this.height * this.width;
+    }
+}
+
+class ColoredRectangleWithText extends Rectangle {
+    constructor(height, width, text, bgColor) {
+        super(height, width);
+        this.text = text;
+        this.bgColor = bgColor;
+    }
+
+    showMyProps() {
+        console.log(`Text: ${this.text}, color: ${this.bgColor}`);
+    }
+}
+
+const square = new Rectangle(10, 10);
+const long = new Rectangle(5, 8);
+const abcd = new ColoredRectangleWithText(5, 15, 'new', 'red');
+
+console.log(abcd.calcArea());
+abcd.showMyProps();
+

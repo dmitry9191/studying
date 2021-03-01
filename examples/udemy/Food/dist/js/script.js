@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
             minutes.textContent = getZero(t.minutes);
             seconds.textContent = getZero(t.seconds);
 
-            if (t.total < 0) {
+            if (t.total <= 0) {
                 clearInterval(timeInterval);
-            }
+            }   
         }
     }
 
@@ -137,5 +137,52 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = overflowValue;
         clearInterval(modalTimerId);
     }
+
+    // Menu
+
+    class MenuItem {
+        
+        constructor(img, alt, subtitle, description, cost, parent) {
+            this.img = img;
+            this.subtitle = subtitle;
+            this.description = description;
+            this.cost = cost;
+            this.alt = alt;
+            this.transfer = 79;
+            this.parent = document.querySelector(parent); 
+            this.changeToRUB();
+        }
+
+        changeToRUB() {
+            this.cost *= this.transfer;
+        }
+
+        render() {
+            const elem = document.createElement('div');
+            elem.innerHTML = `
+                <div class="menu__item">
+                    <img src=${this.img} alt=${this.alt}>
+                    <h3 class="menu__item-subtitle">${this.subtitle}</h3>
+                    <div class="menu__item-descr">${this.description}</div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                        <div class="menu__item-cost">Цена:</div>
+                        <div class="menu__item-total"><span>${this.cost}</span> руб/день</div>
+                    </div>
+                </div>
+            `;
+            this.parent.append(elem);
+        }
+
+    }
+
+    new MenuItem(
+        "img/tabs/vegy.jpg",
+        "vegy",
+        'Меню "Фитнес"',
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей',
+        50,
+        ".menu .container"
+    ).render();
 
 });
