@@ -140,49 +140,80 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Menu
 
-    class MenuItem {
-        
-        constructor(img, alt, subtitle, description, cost, parent) {
+    class MenuCard {
+
+        constructor(img, alt, title, description, price, rate, parent, ...classes) {
             this.img = img;
-            this.subtitle = subtitle;
-            this.description = description;
-            this.cost = cost;
             this.alt = alt;
-            this.transfer = 79;
-            this.parent = document.querySelector(parent); 
-            this.changeToRUB();
+            this.title = title;
+            this.description = description;
+            this.price = price;
+            this.rate = rate;
+            this.classes = classes;
+            this.parent = document.querySelector(parent);
+            this.converter();
         }
 
-        changeToRUB() {
-            this.cost *= this.transfer;
+        converter() {
+            this.price *= this.rate;
         }
 
         render() {
-            const elem = document.createElement('div');
-            elem.innerHTML = `
-                <div class="menu__item">
-                    <img src=${this.img} alt=${this.alt}>
-                    <h3 class="menu__item-subtitle">${this.subtitle}</h3>
-                    <div class="menu__item-descr">${this.description}</div>
-                    <div class="menu__item-divider"></div>
-                    <div class="menu__item-price">
-                        <div class="menu__item-cost">Цена:</div>
-                        <div class="menu__item-total"><span>${this.cost}</span> руб/день</div>
-                    </div>
+            const card = document.createElement('div');
+
+            if (this.classes.length === 0) {
+                this.classes = 'menu__item';
+                card.classList.add(this.classes);
+            } else {
+                this.classes.forEach(className => card.classList.add(className));
+            }
+            card.innerHTML = `
+                <img src=${this.img} alt=${this.alt}>
+                <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr"> ${this.description}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> руб/день</div>
                 </div>
             `;
-            this.parent.append(elem);
+            this.parent.append(card);
         }
 
     }
 
-    new MenuItem(
-        "img/tabs/vegy.jpg",
+    new MenuCard(
+        "img/tabs/vegy.jpg", 
         "vegy",
-        'Меню "Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей',
-        50,
-        ".menu .container"
+        `Меню "Фитнес"`,
+        `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.
+         Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!`,
+         2,
+         79,
+         '.menu .container'
+    ).render();
+
+    new MenuCard(
+        "img/tabs/elite.jpg",
+        "elite",
+        'Меню "Премиум"',
+        `В меню “Премиум” мы используем не
+         только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, 
+         морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
+        3,
+        79,
+        '.menu .container'
+    ).render();
+
+    new MenuCard(
+        "img/tabs/post.jpg",
+        "post",
+        'Меню "Постное"',
+        `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля,
+         овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.`,
+        1.5,
+        79,
+        '.menu .container'
     ).render();
 
 });
