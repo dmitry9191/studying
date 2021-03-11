@@ -259,14 +259,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     statusMessage.textContent = messages.success;
                     form.reset();
                     setTimeout(() => {
-                        form.remove();
+                        statusMessage.remove();
                     }, 2000);
                 } else {
                     statusMessage.textContent = messages.fail;
                     statusMessage.textContent = messages.success;
                     form.reset();
                     setTimeout(() => {
-                        form.remove();
+                        statusMessage.remove();
                     }, 2000);
                 }
             });
