@@ -220,9 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const forms = document.querySelectorAll('form'),
           messages = {
-             load: 'Загрузка',
-             success: 'Спасибо! Мы Вам перезвоним!',
-             fail: 'Что-то пошло не так...'
+              loading: 'Загрузка',
+              success: 'Спасибо, мы Вам перезвоним!',
+              failure: 'Кажется что-то пошло не так...'
           };
 
     forms.forEach(form => {
@@ -232,44 +232,44 @@ document.addEventListener('DOMContentLoaded', () => {
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             const statusMessage = document.createElement('div');
             statusMessage.classList.add('status');
-            statusMessage.textContent = messages.load;
+            statusMessage.textContent = messages.loading;
             form.append(statusMessage);
 
             const request = new XMLHttpRequest();
-            
+
             request.open('POST', 'server.php');
             request.setRequestHeader('Content-type', 'application/json');
 
             const formData = new FormData(form);
+            const obj = {};
 
-            const object = {};
-            formData.forEach(function(key, value) {
-                object[key] = value;
+            formData.forEach((key, value) => {
+                obj[key] = value;
             });
 
-            const json = JSON.stringify(object);
-            
+            const json = JSON.stringify(obj);
+
             request.send(json);
+
             request.addEventListener('load', () => {
                 if (request.status === 200) {
-                    console.log(request.response);
                     statusMessage.textContent = messages.success;
-                    form.reset();
+                    form.restart();
                     setTimeout(() => {
                         statusMessage.remove();
                     }, 2000);
                 } else {
-                    statusMessage.textContent = messages.fail;
-                    statusMessage.textContent = messages.success;
-                    form.reset();
+                    statusMessage.textContent = messages.failure;
+                    form.restart();
                     setTimeout(() => {
                         statusMessage.remove();
                     }, 2000);
                 }
             });
+
         });
     }
 
