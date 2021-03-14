@@ -96,45 +96,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // Modal
 
     const btnTrigger = document.querySelectorAll('[data-modal]'),
-          modal = document.querySelector('.modal'),
-          btnClose = document.querySelector('[data-close]');
+          modal = document.querySelector('.modal');
 
     btnTrigger.forEach(btn => {
         btn.addEventListener('click', () => {
-            toggler('hidden');
+            openModal();
         });
     });
 
-    btnClose.addEventListener('click', () => {
-        toggler('');
-    });
+    const modalTimerId = setTimeout(openModal, 5000);
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            toggler('');
+        if (e.target === modal || e.target.getAttribute('data-close') == "") {
+            closeModal();
         }
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.code === 'Escape' && modal.classList.contains('show')) {
-            toggler('');
+        if (e.code === "Escape" && modal.classList.contains('show')) { 
+            closeModal();
         }
     });
-
-    const modalTimerId = setTimeout(toggler, 5000, 'hidden');
-
+    
     window.addEventListener('scroll', showModalByScroll);
 
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-            toggler('hidden');
+            openModal();
             window.removeEventListener('scroll', showModalByScroll);
         }
     }
 
-    function toggler(overflowValue) {
-        modal.classList.toggle('show');
-        document.body.style.overflow = overflowValue;
+    function closeModal() {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    function openModal() {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
         clearInterval(modalTimerId);
     }
 
@@ -233,10 +235,13 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            statusMessage.textContent = messages.loading;
-            form.append(statusMessage);
+            const statusMessage = document.createElement('img');
+            statusMessage.src = 'img/form/spinner.svg';
+            statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+            form.insertAdjacentElement('afterend', statusMessage);
 
             const request = new XMLHttpRequest();
 
@@ -256,21 +261,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
             request.addEventListener('load', () => {
                 if (request.status === 200) {
-                    statusMessage.textContent = messages.success;
+                    console.log(request.response);
+                    showThankModal(messages.success);
                     form.reset();
-                    setTimeout(() => {
-                        statusMessage.remove();
-                    }, 2000);
+                    statusMessage.remove();
                 } else {
-                    statusMessage.textContent = messages.failure;
+                    showThankModal(messages.failure);
                     form.reset();
-                    setTimeout(() => {
-                        statusMessage.remove();
-                    }, 2000);
+                    statusMessage.remove();
                 }
             });
 
         });
+    }
+
+    function showThankModal(message) {
+        const prevModalDialog = document.querySelector('.modal__dialog');
+
+        prevModalDialog.classList.add('hide');
+        openModal();
+
+        const thankModal = document.createElement('div');
+        thankModal.classList.add('modal__dialog');
+        thankModal.innerHTML = `
+            <div class="modal__content">
+                <div class="modal__close" data-close="">×</div>
+                <div class="modal__title">${message}</div>
+            </div>
+        `;
+        document.querySelector('.modal').append(thankModal);
+
+        setTimeout(() => {
+            thankModal.remove();
+            prevModalDialog.classList.add('show');
+            prevModalDialog.classList.remove('hide');
+            closeModal();
+        }, 4000);
     }
 
 });
