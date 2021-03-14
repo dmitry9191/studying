@@ -257,13 +257,13 @@ document.addEventListener('DOMContentLoaded', () => {
             request.addEventListener('load', () => {
                 if (request.status === 200) {
                     statusMessage.textContent = messages.success;
-                    form.restart();
+                    form.reset();
                     setTimeout(() => {
                         statusMessage.remove();
                     }, 2000);
                 } else {
                     statusMessage.textContent = messages.failure;
-                    form.restart();
+                    form.reset();
                     setTimeout(() => {
                         statusMessage.remove();
                     }, 2000);
