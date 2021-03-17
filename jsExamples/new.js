@@ -1,4 +1,7 @@
 'use strict';
+/*
+
+Promises
 
 console.log('Запрос данных...');
 
@@ -32,4 +35,9 @@ req.then((product) => {
 }).finally(() => {
     console.log('finally');
 });
+*/
 
+
+// Fetch API
+
+fetch();
