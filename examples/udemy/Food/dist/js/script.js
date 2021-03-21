@@ -144,13 +144,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     class MenuCard {
 
-        constructor(img, alt, title, description, price, rate, parent, ...classes) {
+        constructor(img, alt, title, description, price, parent, ...classes) {
             this.img = img;
             this.alt = alt;
             this.title = title;
             this.description = description;
             this.price = price;
-            this.rate = rate;
+            this.rate = 79;
             this.classes = classes;
             this.parent = document.querySelector(parent);
             this.converter();
@@ -184,39 +184,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    new MenuCard(
-        "img/tabs/vegy.jpg", 
-        "vegy",
-        `Меню "Фитнес"`,
-        `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.
-         Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!`,
-         2,
-         79,
-         '.menu .container'
-    ).render();
+    const getResource = async (url) => {
+        const res = await fetch(url);
+        
+        if (!res.ok) {
+            throw new Error(`Could now fetch ${url}, status: ${res.status}`);
+        }
 
-    new MenuCard(
-        "img/tabs/elite.jpg",
-        "elite",
-        'Меню "Премиум"',
-        `В меню “Премиум” мы используем не
-         только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, 
-         морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
-        3,
-        79,
-        '.menu .container'
-    ).render();
+        return await res.json();
+    };
 
-    new MenuCard(
-        "img/tabs/post.jpg",
-        "post",
-        'Меню "Постное"',
-        `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля,
-         овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.`,
-        1.5,
-        79,
-        '.menu .container'
-    ).render();
+    getResource('http://localhost:3000/menu')
+        .then(data => data.forEach(({altimg, descr, img, price, title}) => {
+            new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+        }));
 
     // Forms
 
@@ -228,10 +209,23 @@ document.addEventListener('DOMContentLoaded', () => {
           };
 
     forms.forEach(form => {
-        postData(form);
+        bindPostData(form);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+            'Content-type': 'application/json'
+            },
+            body: data
+        });
+
+        return await res.json();
+
+    };
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -244,21 +238,10 @@ document.addEventListener('DOMContentLoaded', () => {
             form.insertAdjacentElement('afterend', statusMessage);
 
             const formData = new FormData(form);
-            
-            const obj = {};
 
-            formData.forEach((key, value) => {
-                obj[key] = value;
-            });
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            fetch('server.php', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(obj)
-            })
-            .then(data => data.text())
+            postData('http://localhost:3000/requests', json)
             .then(data => {
                 console.log(data);
                 showThankModal(messages.success);
@@ -300,4 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
 
-});
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res => console.log(res));
+
+}); 
