@@ -193,11 +193,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return await res.json();
     };
-
+/*
     getResource('http://localhost:3000/menu')
         .then(data => data.forEach(({altimg, descr, img, price, title}) => {
             new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
         }));
+*/
+
+    axios.get('http://localhost:3000/menu')
+        .then(data => {
+            data.data.forEach(({altimg, descr, img, price, title}) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+            });
+        });
 
     // Forms
 
