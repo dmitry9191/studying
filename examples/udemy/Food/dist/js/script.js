@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     }
+/*
 
     const getResource = async (url) => {
         const res = await fetch(url);
@@ -193,7 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return await res.json();
     };
-/*
     getResource('http://localhost:3000/menu')
         .then(data => data.forEach(({altimg, descr, img, price, title}) => {
             new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
@@ -294,5 +294,68 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res));
+
+    // Slider
+
+    const sliderNext = document.querySelector('.offer__slider-next'),
+          sliderPrev = document.querySelector('.offer__slider-prev'),
+          currentSlide = document.querySelector('#current'),
+          totalSlides = document.querySelector('#total'),
+          slides = document.querySelectorAll('.offer__slide');
+
+
+    let index = 0;
+    currentSlide.textContent = `01`;
+
+    if (slides.length < 10) {
+        totalSlides.textContent = `0${slides.length}`;
+    } else {
+        totalSlides.textContent = slides.length;
+    }
+
+    hideSlide();
+    showSlide();
+
+    sliderNext.addEventListener('click', () => {
+        index++;
+        switchSlide();
+    });
+
+    sliderPrev.addEventListener('click', () => {
+        index--;
+        switchSlide();
+    });
+
+    function switchSlide() {
+        indexDefiner();
+        if (slides.length < 10){
+            currentSlide.textContent = `0${index + 1}`;
+        } else {
+            currentSlide.textContent = index + 1;
+        }   
+        hideSlide();
+        showSlide(index);
+    }
+
+    function hideSlide() {
+        slides.forEach((slide) => {
+            slide.classList.add('hide');
+            slide.classList.remove('show', 'fade');
+        });
+    }
+
+    function showSlide(slide = 0) {
+        slides[slide].classList.add('show', 'fade');
+        slides[slide].classList.remove('hide');
+    }
+
+    function indexDefiner() {
+        if (index < 0) {
+            index = slides.length - 1;
+        }
+        if (index === slides.length) {
+            index = 0;
+        }
+    }
 
 }); 
