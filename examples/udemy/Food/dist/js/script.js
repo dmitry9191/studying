@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevModalDialog.classList.add('show');
             prevModalDialog.classList.remove('hide');
             closeModal();
-        }, 4000);
+        }, 5000);
     }
 
     fetch('http://localhost:3000/menu')
@@ -301,11 +301,79 @@ document.addEventListener('DOMContentLoaded', () => {
           sliderPrev = document.querySelector('.offer__slider-prev'),
           currentSlide = document.querySelector('#current'),
           totalSlides = document.querySelector('#total'),
-          slides = document.querySelectorAll('.offer__slide');
+          slides = document.querySelectorAll('.offer__slide'),
+          slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+          slidesField = document.querySelector('.offer__slider-inner'),
+          width = window.getComputedStyle(slidesWrapper).width;
 
+    let slideIndex = 1;
+    let offset = 0;
+    
+    if (slides.length < 10) {
+        totalSlides.textContent = `0${slides.length}`;
+        currentSlide.textContent = `0${slideIndex}`;
+    } else {
+        totalSlides.textContent = slides.length;
+        currentSlide.textContent = slideIndex;
+    }
 
-    let index = 0;
-    currentSlide.textContent = `01`;
+    slidesField.style.width = 100 * slides.length + '%';
+    slidesField.style.display = 'flex';
+    slidesField.style.transition = '0.5s all';
+
+    slidesWrapper.style.overflow = 'hidden';
+
+    slides.forEach(slide => {
+        slide.style.width = width;
+    });
+
+    sliderNext.addEventListener('click', () => {
+        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+            offset = 0;
+        } else {
+            offset += +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        if (slideIndex == slides.length) {
+            slideIndex = 1;
+        } else {
+            slideIndex++;
+        }
+
+        if (slides.length < 10) {
+            currentSlide.textContent = `0${slideIndex}`;
+        } else {
+            currentSlide.textContent = slideIndex;
+        }
+
+    });
+
+    sliderPrev.addEventListener('click', () => {
+        if (offset == 0) {
+            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+        } else {
+            offset -= +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        if (slideIndex == 1) {
+            slideIndex = slides.length;
+        } else {
+            slideIndex--;
+        }
+
+        if (slides.length < 10) {
+            currentSlide.textContent = `0${slideIndex}`;
+        } else {
+            currentSlide.textContent = slideIndex;
+        }
+        
+    });
+    
+    /*
 
     if (slides.length < 10) {
         totalSlides.textContent = `0${slides.length}`;
@@ -313,49 +381,43 @@ document.addEventListener('DOMContentLoaded', () => {
         totalSlides.textContent = slides.length;
     }
 
-    hideSlide();
-    showSlide();
+    showSlide(slideIndex);
+
+    function showSlide(n) {
+        if (n > slides.length) {
+            slideIndex = 1;
+        }
+        if (n < 1) {
+            slideIndex = slides.length;
+        }
+
+        slides.forEach(slide => {
+            slide.style.display = 'none';
+        });
+
+        slides[slideIndex - 1].style.display = 'block';
+
+        if (slides.length < 10) {
+            currentSlide.textContent = `0${slideIndex}`;
+        } else {
+            currentSlide.textContent = slideIndex;
+        }
+    }
+
+    function plusSlide(n) {
+        showSlide(slideIndex += n);
+    }
 
     sliderNext.addEventListener('click', () => {
-        index++;
-        switchSlide();
+        plusSlide(1);
     });
 
     sliderPrev.addEventListener('click', () => {
-        index--;
-        switchSlide();
+        plusSlide(-1);
     });
+    
+    */
 
-    function switchSlide() {
-        indexDefiner();
-        if (slides.length < 10){
-            currentSlide.textContent = `0${index + 1}`;
-        } else {
-            currentSlide.textContent = index + 1;
-        }   
-        hideSlide();
-        showSlide(index);
-    }
 
-    function hideSlide() {
-        slides.forEach((slide) => {
-            slide.classList.add('hide');
-            slide.classList.remove('show', 'fade');
-        });
-    }
-
-    function showSlide(slide = 0) {
-        slides[slide].classList.add('show', 'fade');
-        slides[slide].classList.remove('hide');
-    }
-
-    function indexDefiner() {
-        if (index < 0) {
-            index = slides.length - 1;
-        }
-        if (index === slides.length) {
-            index = 0;
-        }
-    }
 
 }); 
