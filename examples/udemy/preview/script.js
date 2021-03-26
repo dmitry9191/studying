@@ -1,15 +1,5 @@
 'use strict';
 
-const btn = document.querySelectorAll('button');
+localStorage.setItem('number', 5);
 
-btn.forEach(item => {
-    item.addEventListener('click', () => alert('cool'), {once: true});
-});
-
-
-const link = document.querySelector('a');
-
-link.addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('xuy!');
-});
+console.log(localStorage.getItem('number'));
