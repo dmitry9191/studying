@@ -378,13 +378,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sliderNext.addEventListener('click', () => {
         
-        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+        if (offset == removeStr(width) * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += +width.slice(0, width.length - 2);
+            offset += removeStr(width);
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`;
+
+        if (slideIndex == slides.length) {
+            slideIndex = 1;
+        } else {
+            slideIndex++;
+        }
 
        defineNumAndOpacity(slideIndex);
 
@@ -393,9 +399,9 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderPrev.addEventListener('click', () => {
         
         if (offset == 0) {
-            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+            offset = removeStr(width) * (slides.length - 1);
         } else {
-            offset -= +width.slice(0, width.length - 2);
+            offset -= removeStr(width);
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`;
@@ -416,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const slideTo = e.target.getAttribute('data-slide-to');
             
             slideIndex = slideTo;
-            offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            offset = removeStr(width) * (slideTo - 1);
 
             slidesField.style.transform = `translateX(-${offset}px)`;
 
@@ -439,6 +445,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dots[sourceOfNumber - 1].style.opacity = '1';
 
+    }
+
+    function removeStr(strValue) {
+        return +strValue.replace(/\D/g, '');
     }
 
 }); 

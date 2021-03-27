@@ -40,4 +40,16 @@ req.then((product) => {
 
 // Fetch API
 
-fetch();
+// new RegExp('pattern', 'flags');
+// /pattern/[i(ignoreRegister), g(global), m(multipleStrings)]
+/*
+
+RegularExp classes:
+\d (digits),
+\w (letters),
+\s (spaces)
+\D (not digits),
+\W (not words),
+\S (not spaces)
+
+*/
