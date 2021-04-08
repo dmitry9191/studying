@@ -54,6 +54,7 @@ RegularExp classes:
 
 */
 
+/*
 class User {
 
     constructor(name, age) {
@@ -98,3 +99,16 @@ ivan.sur = 'pipik';
 
 console.log(ivan.sur);
 
+*/
+
+try {
+    console.log('normal');
+    console.log(a);
+    console.log('some code');
+} catch(error) {
+    console.log(error.name);
+    console.log(error.stack);
+    console.log(error.message);
+}
+
+console.log('still normal');
