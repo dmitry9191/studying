@@ -8,8 +8,16 @@
   },
   "author": "",
   "license": "ISC",
+  "browserslist": [
+    "> 1%"
+  ],
   "devDependencies": {
-    "json-server": "^0.16.3",
+    "json-server": "^0.16.3"
+  },
+  "dependencies": {
+    "es6-promise": "^4.2.8",
+    "nodelist-foreach-polyfill": "^1.2.0",
+    "webpack": "^5.31.2",
     "webpack-cli": "^4.6.0"
   }
 }
