@@ -101,7 +101,7 @@ console.log(ivan.sur);
 
 */
 
-try {
+/* try {
     console.log('normal');
     console.log(a);
     console.log('some code');
@@ -109,6 +109,7 @@ try {
     console.log(error.name);
     console.log(error.stack);
     console.log(error.message);
-}
+} finally {
 
-console.log('still normal');
+} */
+
