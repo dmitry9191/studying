@@ -113,3 +113,19 @@ console.log(ivan.sur);
 
 } */
 
+/* 
+function* generator(word) {
+    for (let i = 0; i <= word.length; i++) {
+        yield word[i];
+    }
+}
+
+const gen = generator('Hello');
+
+console.log(gen.next().value);
+console.log(gen.next().value);
+console.log(gen.next().value);
+console.log(gen.next().value);
+console.log(gen.next().value);
+console.log(gen.next().value); 
+*/
