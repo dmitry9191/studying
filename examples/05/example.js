@@ -1,1 +1,0 @@
-var hotItems = document.querySelectorAll('li.hot')
